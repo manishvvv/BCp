@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidity Contracts</title>
+    <style>
+        /* body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #25006a;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        h1 {
+            color: aqua;
+
+        }
+
+        pre {
+            white-space: pre-wrap;
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .output-container {
+            background-color: #2d2d2d;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        } */
+        /* Global Styles */
+        /* Base styles for refined typography and spacing */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            /* Modern, open-source font for optimal readability */
+            font-size: 18px;
+            /* Slightly larger base font size for better viewing */
+            line-height: 1.5;
+            /* Increased line-height for comfortable reading */
+            margin: 0;
+            padding: 40px;
+            background-color: #f0f0f0;
+            color: #444;
+        }
+
+        h2 {
+            font-weight: 300;
+            /* Leaner heading for elegance */
+            color: #007bff;
+        }
+
+        pre,
+        code {
+            font-family: 'Fira Code', monospace;
+            /* Professional-grade monospace font with ligatures */
+        }
+
+        .output-container {
+            border-color: #ddd;
+            /* Lighter border color for visual harmony */
+        }
+
+        /* Intentional spacing for visual hierarchy */
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        pre,
+        code {
+            margin-bottom: 20px;
+        }
+
+        /* Enhanced responsiveness for seamless transitions */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            pre,
+            code {
+                font-size: 0.9em;
+            }
+
+            .output-container {
+                padding: 15px;
+            }
+        }
+
+        /* Accentuating color palette for visual appeal */
+        a {
+            color: #007bff;
+            /* Consistent link color */
+        }
+
+        pre,
+        code {
+            background-color: #fafafa;
+            /* Softer gray for improved code contrast */
+        }
+
+        .output-container {
+            background-color: #fff;
+            /* White background for output clarity */
+        }
+
+        /* Subtle shadow treatment for visual depth */
+        .output-container {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            /* Softer and slightly larger shadow */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Blockchain Technology - I_Precticals</h1>
+
+    <h2>1. SimpleBlockchain</h2>
+    <pre>
+        <code>
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract SimpleBlockchain {
+    
+    struct Block {
+        uint256 index;
+        bytes32 data;
+        uint256 timestamp;
+        bytes32 previousHash;
+        bytes32 hash;
+    }
+    
+    Block[] public chain;
+    uint256 public difficulty = 1; // Difficulty for mining
+    
+    event NewBlock(uint256 indexed index, bytes32 indexed data, uint256 timestamp, bytes32 indexed previousHash, bytes32 hash);
+    
+    constructor(bytes32 genesisData) {
+        addBlock(genesisData);
+    }
+    
+    function addBlock(bytes32 data) public {
+        Block memory newBlock = Block({
+            index: chain.length,
+            data: data,
+            timestamp: block.timestamp,
+            previousHash: getLatestBlock().hash,
+            hash: 0
+        });
+        
+        // Proof of work (basic difficulty adjustment)
+        while (uint256(newBlock.hash) >> (256 - difficulty) != 0) {
+            newBlock.hash = keccak256(abi.encodePacked(newBlock.index, newBlock.data, newBlock.timestamp, newBlock.previousHash));
+            newBlock.timestamp = block.timestamp;
+        }
+        
+        chain.push(newBlock);
+        emit NewBlock(newBlock.index, newBlock.data, newBlock.timestamp, newBlock.previousHash, newBlock.hash);
+    }
+    
+   function getLatestBlock() public view returns (Block memory) {
+    require(chain.length > 0, "No blocks in the chain");
+    return chain[chain.length - 1];
+    }
+    
+}
+
+
+        </code>
+    </pre>
+
+
+    <div class="output-container">
+        <h2>Output</h2>
+
+        <code>
+                // Output here...
+            </code>
+
+    </div>
+    <h2>2. HashingContract</h2>
+    <pre>
+        <code>
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.0;
+
+contract HashingContract {
+    
+    event DataHashed(bytes32 indexed data, bytes32 indexed hash);
+    
+    function hashData(bytes32 inputData) public {
+        bytes32 hashedData = sha256(abi.encodePacked(inputData));
+        emit DataHashed(inputData, hashedData);
+    }
+}
+
+
+        </code>
+    </pre>
+
+
+    <div class="output-container">
+        <h2>Output</h2>
+
+        <code>
+                // Output here...
+            </code>
+
+    </div>
